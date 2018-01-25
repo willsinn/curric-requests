@@ -1,1 +1,1 @@
-Google Script automating curriculum requests from emails received
+Google Scripts automating curriculum requests from emails received

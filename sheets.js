@@ -9,6 +9,18 @@
 //7. set function on timer
 
 
+//Account Manager Email Template:
+//----------------------------------------------------------------
+// Location:
+// Name:
+// Prep Type:
+// Current Grade:
+// Session Duration:
+// Portal ID:
+// Date & Time of Next Session:
+// Request Details:
+// Number of Sessions:
+// Initials:
 
 function loggedTime(){
   var date = new Date();

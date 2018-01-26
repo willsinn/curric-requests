@@ -9,6 +9,18 @@
 //7. set function on timer
 
 
+
+function loggedTime(){
+  var date = new Date();
+  var currentTime = date.getTime();
+}
+
+
+
+var time = loggedTime();
+
+
+
 function curricRequests(start) {
 
     var start = start || 0;
@@ -45,7 +57,7 @@ function curricRequests(start) {
         var identify = (post && post[1]) ? post[1].trim() : 'No Portal ID';
 
         post = content.match(/Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var date = (post && post[1]) ? post[1].trim() : 'No Session Details';
+        var nextSession = (post && post[1]) ? post[1].trim() : 'No Session Details';
 
         post = content.match(/Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
         var request = (post && post[1]) ? post[1].trim() : 'No Request';
@@ -59,7 +71,7 @@ function curricRequests(start) {
 
 
 
-        sheet.appendRow([location, name, prep, grade, duration, identify, date, request, amount, requestee]);
+        sheet.appendRow([time, location, name, prep, grade, duration, identify, nextSession, request, amount, requestee]);
 
       }
       // threads[i].moveToSpam();

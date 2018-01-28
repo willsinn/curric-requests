@@ -9,83 +9,62 @@
 //7. set function on timer
 
 
-//Account Manager Email Template:
-//----------------------------------------------------------------
-// Location:
-// Name:
-// Prep Type:
-// Current Grade:
-// Session Duration:
-// Portal ID:
-// Date & Time of Next Session:
-// Request Details:
-// Number of Sessions:
-// Initials:
 
 function loggedTime(){
   var date = new Date();
-  var currentTime = date.getTime();
+  var currentTime = date.getTime();  // Number of ms since Jan 1, 1970
+  return date;
 }
 
+var patternTypes = {
+  location: /Location:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  name: /Name:\s*([A-Za-z0-9\.\-\/&\s, '&']+)(\r?\n)/,
+  prepType: /Prep Type:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  grade: /Current Grade:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  duration: /Session Duration:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  portalId: /Portal ID:\s*([0-9\s]+)(\r?\n)/,
+  sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  request: /Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+  sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\s]+)(\r?\n)/,
+  initials: /Initials:\s*([A-Za-z\s]+)\n/
+};
 
+function matchUserDataWithContent(content) {
+  return function(dataType) {
+    var matchedData = content.match(patternTypes[dataType]);
+    return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No ' + dataType;
+  }
+}
 
-var time = loggedTime();
+function curricRequests(start, dataTypes) {
+  var start = start || 0;
+  var threads = GmailApp.getInboxThreads(start, 5);
+  var sheet = SpreadsheetApp.getActiveSheet();
 
+  // var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  //    SpreadsheetApp.setActiveSpreadsheet(sheet.getSheets()[7]);
 
+  for (var i = 0; i < threads.length; i++) {
 
-function curricRequests(start) {
+    var message = threads[i].getMessages()[0],
+        content = message.getPlainBody();
 
-    var start = start || 0;
-    var threads = GmailApp.getInboxThreads(start, 5);
-    var sheet = SpreadsheetApp.getActiveSheet();
+    var matchUserData = matchUserDataWithContent(content);
+    var dataTypes = ['location', 'name', 'prepType', 'grade', 'duration', 'portalId', 'sessionDetails', 'request', 'sessionAmount', 'initials'];
 
-    // var sheet = SpreadsheetApp.getActiveSpreadsheet();
-    //    SpreadsheetApp.setActiveSpreadsheet(sheet.getSheets()[7]);
+    if (content) {
+      var dataRow = [loggedTime()];
+      dataTypes.map(function(dataType) {
+        dataRow.push(matchUserData(dataType));
+      });
 
-    for (var i = 0; i < threads.length; i++) {
-
-      var post,
-          message = threads[i].getMessages()[0],
-          content = message.getPlainBody();
-
-      if (content) {
-
-        post = content.match(/Location:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var location = (post && post[1]) ? post[1].trim() : 'No Location';
-
-        post = content.match(/Name:\s*([A-Za-z0-9\.\-\/&\s, '&']+)(\r?\n)/);
-        var name = (post && post[1]) ? post[1].trim() : 'No Name';
-
-        post = content.match(/Prep Type:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var prep = (post && post[1]) ? post[1].trim() : 'No Prep Type';
-
-        post = content.match(/Current Grade:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var grade = (post && post[1]) ? post[1].trim() : 'No Grade';
-
-        post = content.match(/Session Duration:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var duration = (post && post[1]) ? post[1].trim() : 'No Duration';
-
-        post = content.match(/Portal ID:\s*([0-9\s]+)(\r?\n)/);
-        var identify = (post && post[1]) ? post[1].trim() : 'No Portal ID';
-
-        post = content.match(/Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var nextSession = (post && post[1]) ? post[1].trim() : 'No Session Details';
-
-        post = content.match(/Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/);
-        var request = (post && post[1]) ? post[1].trim() : 'No Request';
-
-        post = content.match(/Number of Sessions:\s*([A-Za-z0-9\s]+)(\r?\n)/);
-        var amount = (post && post[1]) ? post[1] : 'No Session Amount';
-
-        post = content.match(/Initials:\s*([A-Za-z\s]+)\n/);
-        var requestee = (post && post[1]) ? post[1].trim() : 'No Initials';
-
-
-
-
-        sheet.appendRow([time, location, name, prep, grade, duration, identify, nextSession, request, amount, requestee]);
-
-      }
-      // threads[i].moveToSpam();
+      sheet.appendRow(dataRow);
     }
-  };
+    // threads[i].moveToSpam();
+  }
+};
+
+
+// curricRequests(1, ['location', 'name', 'prepType', 'grade', 'duration', 'portalId', 'sessionDetails', 'request', 'sessionAmount', 'initials']);
+//
+// curricRequests(1, ['location', 'name']);

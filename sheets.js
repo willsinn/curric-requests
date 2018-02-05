@@ -8,7 +8,10 @@
 //6. move read emails
 //7. set function on timer
 
+//------------------------------------
 
+//*****Learn Refactoring***** D.R.Y.
+// Don't, Repeat, Yourself
 
 function loggedTime(){
   var date = new Date();
@@ -16,22 +19,29 @@ function loggedTime(){
   return date;
 }
 
-var patternTypes = {
-  location: /Location:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  name: /Name:\s*([A-Za-z0-9\.\-\/&\s, '&']+)(\r?\n)/,
-  prepType: /Prep Type:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  grade: /Current Grade:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  duration: /Session Duration:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  portalId: /Portal ID:\s*([0-9\s]+)(\r?\n)/,
-  sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  request: /Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-  sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\s]+)(\r?\n)/,
-  initials: /Initials:\s*([A-Za-z\s]+)\n/
-};
+var regexPattern = /s*/[A-Za-z0-9\.\-\/\s]+)(\r?\n)/;
+var dataTypeMap = {
+  location: 'Location:',
+  name: 'Name:',
+  prepType: 'Prep Type:',
+}
+
+// var patternTypes = {
+//   location: /Location:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   name: /Name:\s*([A-Za-z0-9\.\-\/&\s, '&']+)(\r?\n)/,
+//   prepType: /Prep Type:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   grade: /Current Grade:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   duration: /Session Duration:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   portalId: /Portal ID:\s*([0-9\s]+)(\r?\n)/,
+//   sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   request: /Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
+//   sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\s]+)(\r?\n)/,
+//   initials: /Initials:\s*([A-Za-z\s]+)\n/
+// };
 
 function matchUserDataWithContent(content) {
   return function(dataType) {
-    var matchedData = content.match(patternTypes[dataType]);
+    var matchedData = content.match(new RegExp(dataTypeMap[dataType] + regexPattern));
     return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No ' + dataType;
   }
 }

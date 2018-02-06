@@ -1,16 +1,22 @@
-//Script Aim: designed to remove Curriculum-Requests and reduce human error: specifically forgetting to submit Curriculum Requests
-//Script Function: Runs on set timer recording vital Student-Specific information from Email-TEMPLATE sent by ACCOUNT MANAGERS during Registration
-//ACCOUNT MANAGER EMAIL TEMPLATE LOCATED IN README!!!
-//
+/*
+Script Aim: designed to remove Curriculum-Requests and reduce human error: specifically forgetting to submit Curriculum Requests
+Script Function: Runs on set timer recording vital Student-Specific information from Email-TEMPLATE sent by ACCOUNT MANAGERS during Registration
+ACCOUNT MANAGER EMAIL TEMPLATE LOCATED IN README!!!
+*/
 
-//1. find unread emails
-//2. process unread emails through script
-//3. mark emails read
+/*
+Improvements
+------------
+1. find unread emails
+2. process unread emails through script
+3. mark emails read
 
-//      Debugging
-//1. debug line 40, need the string to be reposted and not the var!!
 
-//------------------------------------
+
+Bugs
+----
+1. debug line 56, need the string to be reposted and not the var!!
+*/
 
 
 function hourTrigger() {  //GoogleApps script-runtime limitations: 30 seconds/execution
@@ -76,3 +82,8 @@ function curricRequests(start, dataTypes) {  //Main function
       threads[i].moveToTrash(); //Moves Processed Emails to Trash
   }
 };
+
+
+/* How to ADD a DataType:
+      1. ADD a dataType variable at the bottom of dataTypeMap formatted: --- dataTypeName: 'dataKeyNameInEmail:', ---
+      2. ADD dataTypeName variable at the end of the dataTypes array in curricRequests function formatted: --- 'dataTypeName' --- */

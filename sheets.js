@@ -1,12 +1,8 @@
 //written into google SpreadsheetApp
 
-//1. link incoming emails to SpreadsheetApp -done
-//2. get variables
-//3. sort variables
-//4. create new row
-//5. append variables to spreadsheet
-//6. move read emails
-//7. set function on timer
+//1. find unread emails
+//2. process unread emails through script
+//3. mark emails read
 
 //------------------------------------
 
@@ -15,29 +11,26 @@
 
 function loggedTime(){
   var date = new Date();
-  var currentTime = date.getTime();  // Number of ms since Jan 1, 1970
+  var currentTime = date.getTime();
   return date;
+
 }
 
-var regexPattern = /s*/[A-Za-z0-9\.\-\/\s]+)(\r?\n)/;
+
+var regexPattern = '/\s*[A-Za-z0-9\.\-\/\s, '&']+)(\r?\n)/';
 var dataTypeMap = {
   location: 'Location:',
   name: 'Name:',
   prepType: 'Prep Type:',
-}
+  grade: 'Current Grade:',
+  duration: 'Session Duration:',
+  portalId: 'Portal ID:',
+  sessionDetails: 'Date & Time of Next Session:',
+  request: 'Request Details:',
+  sessionAmount: 'Number of Sessions:',
+  initials: 'Initials:'
 
-// var patternTypes = {
-//   location: /Location:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   name: /Name:\s*([A-Za-z0-9\.\-\/&\s, '&']+)(\r?\n)/,
-//   prepType: /Prep Type:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   grade: /Current Grade:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   duration: /Session Duration:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   portalId: /Portal ID:\s*([0-9\s]+)(\r?\n)/,
-//   sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   request: /Request Details:\s*([A-Za-z0-9\.\-\/\s]+)(\r?\n)/,
-//   sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\s]+)(\r?\n)/,
-//   initials: /Initials:\s*([A-Za-z\s]+)\n/
-// };
+};
 
 function matchUserDataWithContent(content) {
   return function(dataType) {
@@ -49,10 +42,7 @@ function matchUserDataWithContent(content) {
 function curricRequests(start, dataTypes) {
   var start = start || 0;
   var threads = GmailApp.getInboxThreads(start, 5);
-  var sheet = SpreadsheetApp.getActiveSheet();
-
-  // var sheet = SpreadsheetApp.getActiveSpreadsheet();
-  //    SpreadsheetApp.setActiveSpreadsheet(sheet.getSheets()[7]);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Test');
 
   for (var i = 0; i < threads.length; i++) {
 
@@ -70,11 +60,6 @@ function curricRequests(start, dataTypes) {
 
       sheet.appendRow(dataRow);
     }
-    // threads[i].moveToSpam();
+    // threads[i].moveToTrash();
   }
 };
-
-
-// curricRequests(1, ['location', 'name', 'prepType', 'grade', 'duration', 'portalId', 'sessionDetails', 'request', 'sessionAmount', 'initials']);
-//
-// curricRequests(1, ['location', 'name']);

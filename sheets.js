@@ -5,7 +5,7 @@ ACCOUNT MANAGER EMAIL TEMPLATE LOCATED IN README!!!
 */
 
 /*
-Improvements
+ Improvements
 ------------
 1. find unread emails
 2. process unread emails through script
@@ -13,9 +13,8 @@ Improvements
 
 
 
-Bugs
-----
-1. debug line 56, need the string to be reposted and not the var!!
+ Bugs
+------
 */
 
 
@@ -54,7 +53,7 @@ var dataTypeMap = { //DATA required for building curriculums, THIS IS WHERE YOU 
 function matchUserDataWithContent(content) {  //Matches Keys in Email-threads and returns Student-Specific Data
   return function(dataType) {
     var matchedData = content.match(new RegExp(dataTypeMap[dataType] + regexPattern));
-    return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No ' + dataType;
+    return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No ' + dataTypeMap[dataType];
   }
 }
 

@@ -16,13 +16,13 @@ Student Details
 
 Location:
 Name:
+Portal ID:
 Prep Type:
 Current Grade:
 Session Duration:
-Portal ID:
-Date & Time of Next Session:
-Request Details:
+Date & Time of Next Session: Has trouble interpreting colons and partial hours. Format as 3pm
 Number of Sessions:
+Request Details:
 Initials:
 --------------------------------------------------------------------------------------------------
 

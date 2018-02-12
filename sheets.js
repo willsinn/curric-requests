@@ -34,29 +34,27 @@ function loggedTime(){  //Current time of script-runtime, Registrations within t
 
 }
 
-var regexPattern = '/\s*[A-Za-z0-9\.\-\/\s, '&']+)(\r?\n)/'; //Searches for characters of a certain pattern
-
-var dataTypeMap = { //DATA required for building curriculums, THIS IS WHERE YOU WANT TO ADD A DATATYPE
-  location: 'Location:',
-  name: 'Name:',
-  prepType: 'Prep Type:',
-  grade: 'Current Grade:',
-  duration: 'Session Duration:',
-  portalId: 'Portal ID:',
-  sessionDetails: 'Date & Time of Next Session:',
-  request: 'Request Details:',
-  sessionAmount: 'Number of Sessions:',
-  initials: 'Initials:'
+var patternTypes = {
+  location: /Location:\s*([A-Za-z0-9\.,\-\/\s'&']+)(\r?\n)/,
+  name: /Name:\s*([A-Za-z0-9\.,\-\/&\s'&']+)(\r?\n)/,
+  portalId: /Portal ID:\s*([0-9\s]+)(\r?\n)/,
+  prepType: /Prep Type:\s*([A-Za-z0-9\.,\-\/\s'&']+)(\r?\n)/,
+  grade: /Current Grade:\s*([A-Za-z0-9\.,\-\/\s]+)(\r?\n)/,
+  duration: /Session Duration:\s*([A-Za-z0-9\.,\-\/\s]+)(\r?\n)/,
+  sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.,\-\/\s'&']+)(\r?\n)/,
+  sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\,.\-\/\s]+)(\r?\n)/,
+  request: /Request Details:\s*([A-Za-z0-9\.,'"\-\/\s]+)(\r?\n)/,
+  initials: /Initials:\s*([A-Za-z\,.\-\/]+)/
 
 };
 
-function matchUserDataWithContent(content) {  //Matches Keys in Email-threads and returns Student-Specific Data
+
+function matchUserDataWithContent(content) {
   return function(dataType) {
-    var matchedData = content.match(new RegExp(dataTypeMap[dataType] + regexPattern));
-    return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No ' + dataTypeMap[dataType];
+    var matchedData = content.match(patternTypes[dataType]);
+    return (matchedData && matchedData[1]) ? matchedData[1].trim() : 'No-Input, Contact A.M.';
   }
 }
-
 function curricRequests(start, dataTypes) {  //Main function
   var start = start || 0;
   var threads = GmailApp.getInboxThreads(start, 5); //Pulls Emails from 1-100: GoogleApps script-runtime max limit: 100threads/call
@@ -68,7 +66,7 @@ function curricRequests(start, dataTypes) {  //Main function
         content = message.getPlainBody();
 
     var matchUserData = matchUserDataWithContent(content);
-    var dataTypes = ['location', 'name', 'prepType', 'grade', 'duration', 'portalId', 'sessionDetails', 'request', 'sessionAmount', 'initials'];
+    var dataTypes = ['location', 'name','portalId', 'prepType', 'grade', 'duration', 'sessionDetails','sessionAmount', 'request', 'initials'];
         //DATA required for building curriculums, THIS IS WHERE YOU WANT TO ADD A DATATYPE
     if (content) {
       var dataRow = [loggedTime()]; //Adds current time as a value to Array
@@ -78,6 +76,7 @@ function curricRequests(start, dataTypes) {  //Main function
 
       sheet.appendRow(dataRow); //Posts Array in order to Google Spreadsheet
     }
+
       threads[i].moveToTrash(); //Moves Processed Emails to Trash
   }
 };

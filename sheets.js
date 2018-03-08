@@ -48,6 +48,22 @@ var patternTypes = {
 
 };
 
+var inputString = "
+Location: New York, NY,\n
+Name: Rob,
+"
+
+var listOfInput = inputString.split("\n") // ["Location: New York, NY", "Name: Rob"]
+
+listOfInput.map((string) => {
+  // string.replace('Location: ', ''); // New York, NY
+  string.indexOf(':') // 13
+  string.splice(13, string.length).trim();
+});
+
+
+
+
 
 function matchUserDataWithContent(content) {
   return function(dataType) {
@@ -57,7 +73,7 @@ function matchUserDataWithContent(content) {
 }
 function curricRequests(start, dataTypes) {  //Main function
   var start = start || 0;
-  var threads = GmailApp.getInboxThreads(start, 5); //Pulls Emails from 1-100: GoogleApps script-runtime max limit: 100threads/call
+  var threads = GmailApp.getInboxThreads(0, 5); //Pulls Emails from 1-100: GoogleApps script-runtime max limit: 100threads/call
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Test'); //Find sheet by NAME
 
   for (var i = 0; i < threads.length; i++) {

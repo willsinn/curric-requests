@@ -145,7 +145,7 @@ function curricRequests(start, dataTypes) {  //Main function
         grade: /Current Grade:\s*([A-Za-z0-9\.,\-\/\s]+)(\r?\n)/,
         duration: /Session Duration:\s*([A-Za-z0-9\.,\-\/\s]+)(\r?\n)/,
         sessionDetails: /Date & Time of Next Session:\s*([A-Za-z0-9\.,\-\/\s'&']+)(\r?\n)/,
-        sessionAmount: /Number of Sessions:\s*([A-Za-z0-9\,.\-\/\s]+)(\r?\n)/,
+        sessionAmount: /Number of Sessions Remaining:\s*([A-Za-z0-9\,.\-\/\s]+)(\r?\n)/,
         request: /Request Details:\s*([A-Za-z0-9\.,'"\-\/\s]+)(\r?\n)/,
         initials: /Initials:\s*([A-Za-z\,.\-\/]+)/
 
@@ -161,7 +161,7 @@ function curricRequests(start, dataTypes) {  //Main function
       function curricRequests(start, dataTypes) {  //Main function
         var start = start || 0;
         var threads = GmailApp.getInboxThreads(0 , 50); //Pulls Emails from 1-100: GoogleApps script-runtime max limit: 100threads/call
-        var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Test'); //Find sheet by NAME
+        var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Submitted Responses'); //Find sheet by NAME
 
         for (var i = 0; i < threads.length; i++) {
 

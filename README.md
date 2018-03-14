@@ -21,7 +21,7 @@ Prep Type:
 Current Grade:
 Session Duration:
 Date & Time of Next Session: Has trouble interpreting colons and partial hours. Format as 3pm
-Number of Sessions:
+Number of Sessions Remaining:
 Request Details:
 Initials:
 --------------------------------------------------------------------------------------------------
